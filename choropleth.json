@@ -1,0 +1,61 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v4.json",
+  "width": 800,
+  "height": 800,
+  "padding": {"top": 10, "left": 30, "bottom": 30, "right": 10},
+  "data": [
+    {
+      "name": "hw3",
+      "url": "https://raw.githubusercontent.com/n-antony/VA_HW_3/master/losses2015_transformed.csv",
+      "format": {"type": "csv", "parse": "auto"},
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["State_Code"],
+          "fields": ["Amount"],
+          "ops": ["sum"],
+          "as": ["amount"]
+        }
+
+      ]
+    },
+    {
+      "name": "states",
+      "url": "https://raw.githubusercontent.com/n-antony/VA_HW_3/master/us-10m.json",
+      "format": {"type": "topojson", "feature": "states"},
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "hw3",
+          "key": "State_Code",
+          "fields": ["id"],
+          "values": ["amount"]
+        }
+      ]
+    }
+  ],
+  "projections": [{"name": "projection", "type": "albersUsa"}],
+  "scales": [
+    {
+      "name": "color",
+      "type": "quantize",
+      "domain": [0, 0.15],
+      "range": {"scheme": "blues", "count": 10}
+    }
+  ],
+  
+  "marks": [
+    {
+      "type": "shape",
+      "from": {"data": "states"},
+      "encode": {
+        "enter": {"tooltip": {"signal": "datum.amount"}},
+        "update": {"fill": {"scale": "color", "field": "amount" }},
+        "hover": {"fill": {"value": "red"} }
+      },
+      "transform": [{"type": "geoshape", "projection": "projection"}]
+    }
+    
+  ],
+  "config": {}
+}
