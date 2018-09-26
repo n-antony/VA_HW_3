@@ -1,0 +1,73 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v4.json",
+  "width": 800,
+  "height": 800,
+  "padding": {"top": 10, "left": 30, "bottom": 30, "right": 10},
+  "data": [
+    {
+      "name": "hw3",
+      "url": "https://raw.githubusercontent.com/n-antony/VA_HW_3/master/losses2015_transformed.csv",
+      "format": {"type": "csv", "parse": "auto"},
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["State_Abv"],
+          "fields": ["Amount"],
+          "ops": ["sum"],
+          "as": ["amount"]
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "domain": {"data": "hw3", "field": "amount"},
+      "range": "width",
+      "nice": true
+    },
+    {
+      "name": "y",
+      "type": "band",
+      "domain": {"data": "hw3", "field": "State_Abv"},
+      "range": "height",
+      "padding": 0.1
+    }
+  ],
+  "axes": [
+    {"scale": "x", "orient": "bottom", "format": "$,d", "tickCount": 5},
+    {"scale": "y", "orient": "left"}
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "hw3"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "x", "value": 0},
+          "x2": {"scale": "x", "field": "amount"},
+          "y": {"scale": "y", "field": "State_Abv"},
+          "height": {"scale": "y", "band": 1}
+        },
+        "update": {"fill": {"value": "steelblue"}},
+        "hover": {"fill": {"value": "red"}}
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "hw3"},
+      "encode": {
+        "enter": {
+          "x": {"scale": "x", "value": 0},
+          "y": {"scale": "y", "field": "State_Abv"},
+          "dx": {"value": 800},
+          "dy": {"value": 12},
+          "text": {"field": "amount"},
+          "fill": {"value": "#000"}
+        }
+      }
+    }
+  ],
+  "config": {}
+}
