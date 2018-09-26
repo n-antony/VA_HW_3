@@ -22,8 +22,12 @@
   // this does not work when you run locally due to security reasons - it needs to be read from a server
 
   var spec = "https://raw.githubusercontent.com/n-antony/VA_HW_3/master/barchart.json";
+  var spec1 = "https://raw.githubusercontent.com/n-antony/VA_HW_3/master/choropleth.json";
 
   vegaEmbed('#vis', spec).then(function(result) {
+    // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+  }).catch(console.error);
+  vegaEmbed('#vis', spec1).then(function(result) {
     // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
   }).catch(console.error);
 </script>
